@@ -68,17 +68,22 @@ export async function main(ns) {
 
     ns.scp("hack.js", target, home);
     ns.exec("hack.js", target, threads);
-    ns.tprint("hack.js succsessfully running @"+ target + " with -t "+threads+"\nRam used ~: "+(scriptRam*threads).toFixed(2)+"/"+ram);
-    
+    ns.tprint("hack.js succsessfully running @" + target + " with -t " + threads + "\nRam used ~: " + (scriptRam * threads).toFixed(2) + "/" + ram);
+
     if (ns.args[1]) {
-        while (true) {
-            if (ns.getServerSecurityLevel(target) > securityTarget) {
-                await ns.weaken(target);
-            } else if (ns.getServerMoneyAvailable(target) < cashTarget) {
-                await ns.grow(target);
-            } else {
-                await ns.hack(target);
-            }
-        }
+        var max = ramer(home);
+        ram = max[1];
+        threads = max[3];
+        var ramUsed = max[2];
+        currentRam = max[0];
+        ns.tprint("Max threads : " + threads);
+        ns.run("hack.js", threads, target);
+        ns.tprint("hack.js succsessfully running @" + home + " with -t " + threads + "\nRam used ~: " + ramUsed + "/" + ram);
+    }
+    function ramer(target) {
+        ram = ns.getServerMaxRam(target);
+        currentRam = ns.getServerUsedRam(target);
+        var arr = [currentRam, ram, (ram - currentRam.toFixed(2)), ((ram / scriptRam) | 0)]
+        return arr;
     }
 }
