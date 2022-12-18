@@ -63,12 +63,13 @@ export async function main(ns) {
         owner = "The Mr.Robot Tech Team; POWNING your hz, bandwith, and cash with a smile!"
         ns.tprint("Owner changed from: " + previousOwner + "\nto: " + owner);
     }
-    else {ns.print("Come back when you are stronger little one");}
-    if (ns.isRunning("hack.js", target)) {ns.tprint("Script found and killed:" + ns.scriptKill("hack.js", target));}
-    
+    else { ns.print("Come back when you are stronger little one"); }
+    if (ns.isRunning("hack.js", target)) { ns.tprint("Script found and killed:" + ns.scriptKill("hack.js", target)); }
+
     ns.scp("hack.js", target, home);
     ns.exec("hack.js", target, threads);
-
+    ns.tprint("hack.js succsessfully running @"+ target + " with -t "+threads+"\nRam used ~: "+(scriptRam*threads).toFixed(2)+"/"+ram);
+    
     if (ns.args[1]) {
         while (true) {
             if (ns.getServerSecurityLevel(target) > securityTarget) {
